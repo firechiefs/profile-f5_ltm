@@ -32,7 +32,7 @@ class profile_f5_ltm {
   # This means that, although it can receive any type of data from Hiera
   # (strings, arrays, hashes), it cannot merge values from multiple hierarchy
   # levels; you will only get the value from the most-specific hierarchy level.
-  $roles_to_lb = hiera_hash('profile_f5_ltm::roles_to_lb')
+  $roles_to_lb = hiera_hash('profile_f5_ltm:roles_to_lb')
 
   # Anchor pattern to contain dependencies
   anchor { 'profile_f5_ltm::begin': } ->
