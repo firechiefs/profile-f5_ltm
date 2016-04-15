@@ -25,13 +25,23 @@ class profile_f5_ltm::nodes {
       # availability_requirement => 'all',
       # health_monitors          => ['/Common/icmp'],
       # }
-      notify("nodes json was ${nodes}")
+      Notice {'nodes':
+      message => $nodes,
+      }
+
       $partition = $profile_f5_ltm::roles_to_lb[$role][partition]
       $address = $nodes[$node][ipaddress]
       $description = $nodes[$node][hostname]
-      notify("Partition was ${partition}")
-      notify("Address was ${address}")
-      notify("Description was ${description}")
+      Notice {'partition':
+        message => $partition,
+      }
+      Notice {'address':
+        message => $address,
+      }
+      Notice {'description':
+        message => $description,
+      }
+      
       f5_node {"${partition}/${node}":
         ensure          => 'present',
         address         => $address,
