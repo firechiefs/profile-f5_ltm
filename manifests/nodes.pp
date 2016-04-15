@@ -25,23 +25,23 @@ class profile_f5_ltm::nodes {
       # availability_requirement => 'all',
       # health_monitors          => ['/Common/icmp'],
       # }
-      Notice {'nodes':
+      Notify {'nodes':
       message => $nodes,
       }
 
       $partition = $profile_f5_ltm::roles_to_lb[$role][partition]
       $address = $nodes[$node][ipaddress]
       $description = $nodes[$node][hostname]
-      Notice {'partition':
+      Notify {'partition':
         message => $partition,
       }
-      Notice {'address':
+      Notify {'address':
         message => $address,
       }
-      Notice {'description':
+      Notify {'description':
         message => $description,
       }
-      
+
       f5_node {"${partition}/${node}":
         ensure          => 'present',
         address         => $address,
