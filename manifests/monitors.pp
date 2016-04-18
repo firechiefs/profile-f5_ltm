@@ -10,4 +10,5 @@ class profile_f5_ltm::monitors {
     $monitor = $profile_f5_ltm::roles_to_lb[$role][monitor]
     create_resources(f5_monitor,$monitor)
 
+  }
 }
