@@ -1,0 +1,17 @@
+profile_f5_ltm:
+  roles_to_lb:
+    web:
+      partition: '/INF'
+      monitor:
+        # A Hash of monitor options, as per:
+        # https://forge.puppet.com/puppetlabs/f5/readme#f5_monitor
+        # Declare keys and values in this 'monitor' key to create a custom
+        # monitor for this role, otherwise specify the monitor to use for this
+        # role in the pool key
+        name: '/INF/puhprx'
+        parent_monitor: '/Common/http'
+        ensure: 'present'
+
+
+    smtp:
+    cache:
