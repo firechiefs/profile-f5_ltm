@@ -5,10 +5,8 @@ class profile_f5_ltm::monitors {
   # get all 'monitor' keys of a role to lb, and pass that hash into a
   # create_resources() call with the f5_monitor type
 
-  $profile_f5_ltm::roles_to_lb.keys.each | $role | {
-    $monitor = $profile_f5_ltm::roles_to_lb["${role}"][monitor]
-    validate_hash($monitor)
-    create_resources(f5_monitor,$monitor)
-
-  }
+  $test = generate_members_hash_array("puhprx",80,"/INF")
+  Notify {'testing':
+      message => $test
+    }
 }
