@@ -25,7 +25,7 @@ class profile_f5_ltm::pools {
     $pool_hash = $profile_f5_ltm::roles_to_lb[$role][pool]
 
     # the port members will be listening on in this pool
-    $port = $pool_hash[$role][listening_port]
+    $port = $profile_f5_ltm::roles_to_lb[$role][listening_port]
 
     # the partition the nodes resides in
     $partition = $profile_f5_ltm::roles_to_lb[$role][partition]
