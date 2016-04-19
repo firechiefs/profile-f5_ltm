@@ -18,33 +18,35 @@ class profile_f5_ltm::pools {
   #   ...
   # ]
 
+  # What a tangled web.
+  # use the keys of roles_to_lb, which are role names
   $profile_f5_ltm::roles_to_lb.keys.each | $role | {
+    # The pool hash is the hash of all f5_pool options for this role
     $pool_hash = $profile_f5_ltm::roles_to_lb[$role][pool]
-    Notify {'pool hash':
-      message => $pool_hash,
-    }
 
+    # the port members will be listening on in this pool
     $port = $pool_hash[$role][listening_port]
+    
+    # the partition the nodes resides in
     $partition = $profile_f5_ltm::roles_to_lb[$role][partition]
 
+    # A call to this function requires the args role, port, partition
+    # and does a puppetdbquery, returning an array of hashes.
+    # this format is needed for the members attribute of f5_pool.
     # usage: generate_members_hash_array("puhprxs",80,"/INF")
     $getmembers = generate_members_hash_array($role,$port,$partition)
 
+    # A temporary variable so we can create a hash with a key called members
+    # who's value is the output of the custom function above.
+    # TODO:(rmarin) might be able to do this:
+    # $tempvar = {members => (generate_members_hash_array(...))}
     $swapadizzle = {members => $getmembers}
 
+    # The full set of options, including all of our members from above.
+    # this is needed so we can pass this hash to f5_pool in create_resources
     $pool_options = merge($pool_hash[$role], $swapadizzle)
 
-    Notify {'merge output':
-      message => $pool_options
-    }
-
-
-
+    # The magic of create_resources()
+    create_resources(f5_pool,$pool_options)
   }
-  Notify {'another test':
-      message => "this is a test inside f5_ltm_pools"
-    }
-  Notify {'testing':
-      message => "${test}"
-    }
 }
