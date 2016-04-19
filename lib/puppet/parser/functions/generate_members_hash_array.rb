@@ -27,7 +27,8 @@ module Puppet::Parser::Functions
     # https://docs.puppet.com/guides/custom_functions.html
     # don't believe their lies, the brackets is intended for calls in this
     # function, not 'puppet' code manifests
-    nodes_array = function_query_nodes(["role=#{role}"])
+    # nodes_array = function_query_nodes(["role=#{role}"])
+    nodes_array = query_nodes("role=#{role}")
 
     # loop over every returned node, make a hash of the name and port
     # add it into the empty array
