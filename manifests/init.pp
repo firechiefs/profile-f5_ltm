@@ -37,8 +37,8 @@ class profile_f5_ltm {
 
   # Anchor pattern to contain dependencies
   anchor { 'profile_f5_ltm::begin': } ->
-  class { 'profile_f5_ltm::nodes': } ->
-  class { 'profile_f5_ltm::monitors': } ->
+  #class { 'profile_f5_ltm::nodes': } ->
+  #class { 'profile_f5_ltm::monitors': } ->
   class { 'profile_f5_ltm::pools': } ->
   class { 'profile_f5_ltm::vip': } ->
   anchor { 'profile_f5_ltm::end': }
