@@ -32,8 +32,8 @@ module Puppet::Parser::Functions
     # loop over every returned node, make a hash of the name and port
     # add it into the empty array
     nodes_array.each do |node|
-      hash_array.push({"name" => "#{partition}/#{node}", "port" => port })
+      hash_array.push('name' => "#{partition}/#{node}", 'port' => port)
     end
-    hash_array
+    return hash_array
   end
 end
