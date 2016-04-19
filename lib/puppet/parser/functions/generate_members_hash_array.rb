@@ -34,6 +34,12 @@ module Puppet::Parser::Functions
     nodes_array.each do |node|
       hash_array.push('name' => "#{partition}/#{node}", 'port' => port)
     end
-    return hash_array
+
+    if nodes_array.empty?
+      raise Puppet::ParseError, "Error in generate_members_hash_array: query\
+returned 0 nodes"
+    else
+      return hash_array
+    end
   end
 end
