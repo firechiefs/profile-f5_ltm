@@ -19,6 +19,9 @@ class profile_f5_ltm::pools {
   # ]
 
   $test = generate_members_hash_array("puhprx",80,"/INF")
+  Notify {'another test':
+      message => "this is a test inside f5_ltm_pools"
+    }
   Notify {'testing':
       message => $test
     }
