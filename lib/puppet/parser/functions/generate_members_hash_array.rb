@@ -25,7 +25,7 @@ module Puppet::Parser::Functions
     # this is a call to query_nodes in puppetdbquery, but is prefixed with
     # 'function_' as per puppetlabs usage spec for calling external functions.
     # https://docs.puppet.com/guides/custom_functions.html
-    nodes_array = function_query_nodes("role=#{role}")
+    nodes_array = function_query_nodes(["role=#{role}"])
 
     # loop over every returned node, make a hash of the name and port
     # add it into the empty array
