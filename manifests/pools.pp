@@ -20,6 +20,9 @@ class profile_f5_ltm::pools {
 
   $profile_f5_ltm::roles_to_lb.keys.each | $role | {
     $pool_hash = $profile_f5_ltm::roles_to_lb[$role][pool]
+    Notify {'pool hash':
+      message => $pool_hash,
+    }
 
     $port = $pool_hash[$role][listening_port]
     $partition = $profile_f5_ltm::roles_to_lb[$role][partition]
