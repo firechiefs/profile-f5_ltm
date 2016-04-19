@@ -18,7 +18,6 @@ module Puppet::Parser::Functions
     port = args[1]
     partition = args[2]
 
-
     # the empty hash array to insert into
     hash_array = []
 
@@ -37,7 +36,7 @@ module Puppet::Parser::Functions
 
     if nodes_array.empty?
       raise Puppet::ParseError, "Error in generate_members_hash_array: query\
-returned 0 nodes"
+returned 0 nodes for role:#{role}"
     else
       return hash_array
     end

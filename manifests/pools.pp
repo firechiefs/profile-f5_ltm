@@ -18,8 +18,26 @@ class profile_f5_ltm::pools {
   #   ...
   # ]
 
+  $profile_f5_ltm::roles_to_lb.keys.each | $role | {
+    $pool_hash = $profile_f5_ltm::roles_to_lb[$role][pool]
 
-  $test = generate_members_hash_array("puhprxs",80,"/INF")
+    $port = $pool_hash[$role][listening_port]
+    $partition = $profile_f5_ltm::roles_to_lb[$role][partition]
+
+    # usage: generate_members_hash_array("puhprxs",80,"/INF")
+    $getmembers = generate_members_hash_array($role,$port,$partition)
+
+    $swapadizzle = {members => $getmembers}
+
+    $pool_options = merge($pool_hash[$role], $swapadizzle)
+
+    Notify {'merge output':
+      message => $pool_options
+    }
+
+
+
+  }
   Notify {'another test':
       message => "this is a test inside f5_ltm_pools"
     }
