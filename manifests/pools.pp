@@ -4,11 +4,22 @@ class profile_f5_ltm::pools {
   # similar pattern as nodes:
   # get all 'pool' keys of a role to lb, and pass that hash into a
   # create_resources() call with the f5_pool type
-  $profile_f5_ltm::roles_to_lb.keys.each | $role | {
-    $monitor = $profile_f5_ltm::roles_to_lb["${role}"][monitor]
-    validate_hash($monitor)
-    create_resources(f5_monitor,$monitor)
-
-  }
-
+  # The Members attribute on f5_pool requires:
+  # An array of hashes containing pool node members and their port. Pool members
+  # must exist on the F5 before you classify them in f5_pool. You can create the
+  # members using the f5_node type first. (See the example in Usage.)
+  #
+  # Valid options: 'none' or
+  # [
+  #   {
+  #     'name' => '/PARTITION/NODE NAME',
+  #     'port' => <an integer between 0 and 65535>,
+  #   },
+  #   ...
+  # ]
+  
+  $test = generate_members_hash_array("puhprx",80,"/INF")
+  Notify {'testing':
+      message => $test
+    }
 }
