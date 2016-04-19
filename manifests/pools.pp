@@ -26,11 +26,11 @@ class profile_f5_ltm::pools {
 
     # the port members will be listening on in this pool
     $port = $pool_hash[$role][listening_port]
-    
+
     # the partition the nodes resides in
     $partition = $profile_f5_ltm::roles_to_lb[$role][partition]
 
-    # A call to this function requires the args role, port, partition
+    # A call to this function requires the args: role, port, partition
     # and does a puppetdbquery, returning an array of hashes.
     # this format is needed for the members attribute of f5_pool.
     # usage: generate_members_hash_array("puhprxs",80,"/INF")
@@ -44,7 +44,8 @@ class profile_f5_ltm::pools {
 
     # The full set of options, including all of our members from above.
     # this is needed so we can pass this hash to f5_pool in create_resources
-    $pool_options = merge($pool_hash[$role], $swapadizzle)
+    $temp_pool_options = merge($pool_hash[$role], $swapadizzle)
+    $pool_options = {pool => $temp_pool_options}
 
     # The magic of create_resources()
     create_resources(f5_pool,$pool_options)
