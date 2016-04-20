@@ -40,6 +40,7 @@ class profile_f5_ltm {
   class { 'profile_f5_ltm::nodes': } ->
   class { 'profile_f5_ltm::monitors': } ->
   class { 'profile_f5_ltm::pools': } ->
+  class { 'profile_f5_ltm::irules': } ->
   class { 'profile_f5_ltm::vip': } ->
   anchor { 'profile_f5_ltm::end': }
 }
