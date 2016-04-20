@@ -12,9 +12,9 @@ class profile_f5_ltm::vip {
 
   # use the keys of roles_to_lb, which are role names
   $profile_f5_ltm::roles_to_lb.keys.each | $role | {
-    $virtual_server = $profile_f5_ltm::roles_to_lb["${role}"][vip]
+    $virtual_server = $profile_f5_ltm::roles_to_lb[$role][vip]
     validate_hash($virtual_server)
-    create_resources(f5_monitor,$virtual_server)
+    create_resources(f5_virtualserver,$virtual_server)
   }
 
 }
