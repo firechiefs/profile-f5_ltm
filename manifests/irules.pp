@@ -8,6 +8,8 @@ class profile_f5_ltm::irules {
   $profile_f5_ltm::roles_to_lb.keys.each | $role | {
     $irule = $profile_f5_ltm::roles_to_lb[$role][irule]
     validate_hash($irule)
-    create_resources(f5_irule,$irule)
+    if !empty($irule) {
+      create_resources(f5_irule,$irule)
+    }
   }
 }
