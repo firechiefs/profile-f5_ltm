@@ -20,7 +20,7 @@
 
 # Dependencies: puppetlabs/f5, puppetlabs/stdlib, dalen/puppetdbquery
 # == Class: profile_f5_ltm
-#
+# The containing class and main entry point to load balancing a 'role' of server
 class profile_f5_ltm {
   # TODO: (rmarin), this might better be an APL lookup in hiera
   # Though the lookup type is priority only, which means you cannot do a merge
@@ -32,7 +32,7 @@ class profile_f5_ltm {
   # This means that, although it can receive any type of data from Hiera
   # (strings, arrays, hashes), it cannot merge values from multiple hierarchy
   # levels; you will only get the value from the most-specific hierarchy level.
-  $cfg = hiera_hash('profile_f5_ltm')
+  $cfg = hiera('profile_f5_ltm')
   $roles_to_lb = $cfg[roles_to_lb]
 
   # Anchor pattern to contain dependencies
@@ -40,6 +40,7 @@ class profile_f5_ltm {
   class { 'profile_f5_ltm::nodes': } ->
   class { 'profile_f5_ltm::monitors': } ->
   class { 'profile_f5_ltm::pools': } ->
+  class { 'profile_f5_ltm::irules': } ->
   class { 'profile_f5_ltm::vip': } ->
   anchor { 'profile_f5_ltm::end': }
 }
