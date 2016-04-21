@@ -3,6 +3,7 @@ module Puppet::Parser::Functions
   newfunction(:generate_members_hash_array, :type => :rvalue) do |args|
     # first arg is the role to lookup in puppetdb
     # second arg is the port
+    # third arg is the partition
     # we will try to combine the hostnames and port into an array of hashes
     # ala this format:
     # [
@@ -27,17 +28,15 @@ module Puppet::Parser::Functions
     # don't believe their lies, the brackets is intended for calls in this
     # function, not 'puppet' code manifests
     nodes_array = function_query_nodes(["role=#{role}"])
-
-    # loop over every returned node, make a hash of the name and port
-    # add it into the empty array
-    nodes_array.each do |node|
-      hash_array.push('name' => "#{partition}/#{node}", 'port' => port)
-    end
-
-    if nodes_array.empty?
-      raise Puppet::ParseError, "Error in generate_members_hash_array: query\
-returned 0 nodes for role:#{role}"
-    else
+      if nodes_array.empty?
+        raise Puppet::ParseError, "Error in generate_members_hash_array: query\
+  returned 0 nodes for role:#{role}"
+      else
+        # loop over every returned node, make a hash of the name and port
+        # add it into the empty array
+        nodes_array.each do |node|
+        hash_array.push('name' => "#{partition}/#{node}", 'port' => port)
+      end
       return hash_array
     end
   end
