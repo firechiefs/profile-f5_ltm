@@ -23,31 +23,32 @@ class profile_f5_ltm::pools {
   $profile_f5_ltm::roles_to_lb.keys.each | $role | {
     # The pool hash is the hash of all f5_pool options for this role
     $pool_hash = $profile_f5_ltm::roles_to_lb[$role][pool]
+    if !empty($pool_hash) {
+      # the port members will be listening on in this pool
+      $port = $profile_f5_ltm::roles_to_lb[$role][listening_port]
 
-    # the port members will be listening on in this pool
-    $port = $profile_f5_ltm::roles_to_lb[$role][listening_port]
+      # the partition the nodes resides in
+      $partition = $profile_f5_ltm::roles_to_lb[$role][partition]
 
-    # the partition the nodes resides in
-    $partition = $profile_f5_ltm::roles_to_lb[$role][partition]
+      # A call to this function requires the args: role, port, partition
+      # and does a puppetdbquery, returning an array of hashes.
+      # this format is needed for the members attribute of f5_pool.
+      # usage: generate_members_hash_array("puhprxs",80,"/INF")
+      $getmembers = generate_members_hash_array($role,$port,$partition)
 
-    # A call to this function requires the args: role, port, partition
-    # and does a puppetdbquery, returning an array of hashes.
-    # this format is needed for the members attribute of f5_pool.
-    # usage: generate_members_hash_array("puhprxs",80,"/INF")
-    $getmembers = generate_members_hash_array($role,$port,$partition)
+      # A temporary variable so we can create a hash with a key called members
+      # who's value is the output of the custom function above.
+      # TODO:(rmarin) might be able to do this:
+      # $tempvar = {members => (generate_members_hash_array(...))}
+      $swapadizzle = {members => $getmembers}
 
-    # A temporary variable so we can create a hash with a key called members
-    # who's value is the output of the custom function above.
-    # TODO:(rmarin) might be able to do this:
-    # $tempvar = {members => (generate_members_hash_array(...))}
-    $swapadizzle = {members => $getmembers}
+      # The full set of options, including all of our members from above.
+      # this is needed so we can pass this hash to f5_pool in create_resources
+      $temp_pool_options = merge($pool_hash[$role], $swapadizzle)
+      $pool_options = {pool => $temp_pool_options}
 
-    # The full set of options, including all of our members from above.
-    # this is needed so we can pass this hash to f5_pool in create_resources
-    $temp_pool_options = merge($pool_hash[$role], $swapadizzle)
-    $pool_options = {pool => $temp_pool_options}
-
-    # The magic of create_resources()
-    create_resources(f5_pool,$pool_options)
+      # The magic of create_resources()
+      create_resources(f5_pool,$pool_options)
+    }
   }
 }
