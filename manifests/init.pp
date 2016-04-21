@@ -20,7 +20,7 @@
 
 # Dependencies: puppetlabs/f5, puppetlabs/stdlib, dalen/puppetdbquery
 # == Class: profile_f5_ltm
-#
+# The containing class and main entry point to load balancing a 'role' of server
 class profile_f5_ltm {
   # TODO: (rmarin), this might better be an APL lookup in hiera
   # Though the lookup type is priority only, which means you cannot do a merge
